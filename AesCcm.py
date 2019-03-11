@@ -36,7 +36,7 @@ Counter with CBC-MAC (CCM) mode.
 import struct
 from binascii import unhexlify
 
-from Utils import long_to_bytes, strxor, is_writeable_buffer
+from Utils import long_to_bytes, strxor, is_writeable_buffer, get_random_bytes
 
 
 def enum(**enums):
@@ -448,7 +448,8 @@ class CcmMode(object):
             self._mac_status = MacStatus.PROCESSING_PLAINTEXT
 
         # Encrypt is equivalent to decrypt with the CTR mode
-        plaintext = self._cipher.encrypt(ciphertext, output=output)
+        # plaintext = self._cipher.encrypt(ciphertext, output=output)
+        plaintext = self._cipher.encrypt(ciphertext)
         if output is None:
             self._update(plaintext)
         else:
@@ -585,7 +586,8 @@ class CcmMode(object):
             or the key is incorrect.
         """
 
-        plaintext = self.decrypt(ciphertext, output=output)
+        # plaintext = self.decrypt(ciphertext, output=output)
+        self.decrypt(ciphertext)
         self.verify(received_mac_tag)
         return plaintext
 

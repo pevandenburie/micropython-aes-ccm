@@ -24,6 +24,7 @@
 # ===================================================================
 #
 
+import uos
 import struct
 
 def long_to_bytes(n, blocksize=0):
@@ -67,6 +68,8 @@ def long_to_bytes(n, blocksize=0):
 def strxor(var1, var2):
     return bytes([ a ^ b for (a,b) in zip(var1, var2)])
 
+def get_random_bytes(n):
+    return uos.urandom(n)
 
 # Workaround
 def is_writeable_buffer(data):
