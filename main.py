@@ -2,7 +2,7 @@ import json
 import binascii
 import AesCcm
 
-print("Hello AES-CCM 2")
+print("Hello AES-CCM")
 
 # Key: 1AE1CC81F39199114EB794C944E655DF
 # Timestamp: 5c52184b
@@ -25,9 +25,7 @@ cipher.update(header)
 ciphertext, tag = cipher.encrypt_and_digest(data)
 
 json_k = [ 'nonce', 'header', 'ciphertext', 'tag' ]
-#json_v = [ b64encode(x).decode('utf-8') for x in [cipher.nonce, header, ciphertext, tag] ]
 json_v = [ binascii.hexlify(x) for x in [cipher.nonce, header, ciphertext, tag] ]
-# json_v = [ x.hex() for x in [cipher.nonce, header, ciphertext, tag] ]
 result = json.dumps(dict(zip(json_k, json_v)))
 print(result)
 
@@ -35,4 +33,4 @@ print(result)
 cipher = AesCcm.new(key, nonce=nonce, mac_len=4)
 cipher.update(header)
 result = cipher.decrypt_and_verify(ciphertext, tag)
-print(result)
+print( "Plaintext: {}".format(binascii.hexlify(result) ))

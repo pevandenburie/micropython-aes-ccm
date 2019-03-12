@@ -530,11 +530,14 @@ class CcmMode(object):
         self._digest()
         secret = get_random_bytes(16)
 
-        mac1 = BLAKE2s.new(digest_bits=160, key=secret, data=self._mac_tag)
-        mac2 = BLAKE2s.new(digest_bits=160, key=secret, data=received_mac_tag)
+        if (self._mac_tag != received_mac_tag):
+                raise ValueError("MAC check failed")
 
-        if mac1.digest() != mac2.digest():
-            raise ValueError("MAC check failed")
+        # mac1 = BLAKE2s.new(digest_bits=160, key=secret, data=self._mac_tag)
+        # mac2 = BLAKE2s.new(digest_bits=160, key=secret, data=received_mac_tag)
+        #
+        # if mac1.digest() != mac2.digest():
+        #     raise ValueError("MAC check failed")
 
     def hexverify(self, hex_mac_tag):
         """Validate the *printable* MAC tag.
@@ -587,7 +590,7 @@ class CcmMode(object):
         """
 
         # plaintext = self.decrypt(ciphertext, output=output)
-        self.decrypt(ciphertext)
+        plaintext = self.decrypt(ciphertext)
         self.verify(received_mac_tag)
         return plaintext
 
